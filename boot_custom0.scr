@@ -1,0 +1,7 @@
+setenv bootpart 3
+setenv rootpart 2
+setenv regen_ext2_bootargs 'setenv bootdev_bootargs root=/dev/${devname}${bootpart} rootwait rw; run regen_all'
+setenv cros_bootfile /vmlinux.uimg
+setenv extra_bootargs console=tty1
+setenv mmc0_boot echo ERROR: Could not boot from USB or SD
+setenv common_bootargs cros_legacy console=/dev/ttyS0

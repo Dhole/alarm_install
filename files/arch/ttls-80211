@@ -1,0 +1,23 @@
+name = TTLS for Wireless
+author = Alexander Clouter
+version = 1
+require anon_identity *Anonymous_Username identity *Identity password *Password 
+optional ca_cert *Path_to_CA_Cert cert_subject *Certificate_Subject
+-----
+ctrl_interface=/var/run/wpa_supplicant
+network={
+       ssid="$_ESSID"
+       scan_ssid=$_SCAN
+
+       key_mgmt=WPA-EAP
+       eap=TTLS
+
+       ca_cert="$_CA_CERT"
+       subject_match="$_CERT_SUBJECT"
+ 
+       phase2="auth=PAP"
+
+       anonymous_identity="$_ANON_IDENTITY"
+       identity="$_IDENTITY"
+       password="$_PASSWORD"
+}

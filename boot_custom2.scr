@@ -1,0 +1,5 @@
+setenv bootargs root=/dev/mapper/alarm_rootfs cryptdevice=/dev/mmcblk1p3:alarm_rootfs rootwait rw
+mmc dev 1
+ext2load mmc 1:2 42000000 vmlinux.uimg
+ext2load mmc 1:2 44000000 uInitrd.uimg
+bootm 42000000 44000000

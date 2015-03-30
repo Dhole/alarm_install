@@ -1,0 +1,10 @@
+*.uimg
+*.kpart
+*.key
+ArchLinuxARM-chromebook-latest.tar.gz
+chromeos/
+lib/
+release-*/
+mnt/
+root/
+files/arch/private/
