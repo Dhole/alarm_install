@@ -70,13 +70,11 @@ function add_user {
 }
 
 function install_packages {
-    pacman -S xorg-server xorg-xinit xorg-server-utils mesa xf86-video-fbdev xf86-input-synaptics unzip dbus
+    pacman -S xorg-server xorg-xinit xorg-server-utils mesa xf86-video-fbdev xf86-input-synaptics xf86-armsoc-chromium unzip dbus
     # Choose mesa-libgl when asked
     pacman -S lightdm lightdm-gtk3-greeter gnome-icon-theme
-    pacman -S xfce4 sudo firefox midori gnome-keyring wget vim ttf-dejavu ttf-ubuntu-font-family htop strace lsof i3 xscreensaver git conky dmenu profont dina-font tamsyn-font alsa-utils ntp pm-utils p7zip xarchiver unrar zip python-pip tmux mpv mc make tmux iputils rtorrent youtube-dl macchanger tree acpid pulseaudio pulseaudio-alsa
+    pacman -S xfce4 sudo firefox midori gnome-keyring wget vim ttf-dejavu ttf-ubuntu-font-family htop strace lsof i3 xscreensaver git conky dmenu profont dina-font tamsyn-font alsa-utils ntp pm-utils p7zip xarchiver unrar zip python-pip tmux mpv mc make tmux iputils rtorrent youtube-dl macchanger tree acpid pulseaudio pulseaudio-alsa mupdf clang file gvim mosh nmap rxvt-unicode thunar 
     pacman -S adduser rsyslog
-    # Not exactly sure what this is
-    pacman -S xf86-armsoc-chromium
 }
 
 function user_config {
