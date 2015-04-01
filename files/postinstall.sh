@@ -1,10 +1,11 @@
-#! /bin/sh
-set -uew
+#! /bin/bash
+set -uex
 
 function arch_customization {
     # Disable clearing of boot messages
     mkdir -p /etc/systemd/system/getty@tty1.service.d/
     echo -e "[Service]\nTTYVTDisallocate=no" > /etc/systemd/system/getty@tty1.service.d/noclear.conf
+    mkdir -p /etc/ld.conf/
     echo "/usr/local/lib" >> /etc/ld.conf.d/local.conf
     
     # Install fonts http://linuxfonts.narod.ru/
@@ -46,11 +47,15 @@ function arch_customization {
     cd /etc/wicd/encryption/templates
     echo ttls-80211 >> active
     cd /root
-    mkdir -p etc/ca-certificates/custom/
+    mkdir -p /etc/ca-certificates/custom/
     cp /root/files/AddTrustExternalCARoot.crt /etc/ca-certificates/custom/
     
     # Chromium defaults
     cp /root/files/chromium_default /etc/chromium/default
+
+    # Install wicd saved networks
+    cp /root/files/private/wireless-settings.conf /etc/wicd/
+    systemctl enable wicd
 }
 
 function arch_config {
@@ -63,18 +68,16 @@ function arch_config {
 }
 
 function add_user {
-    useradd -m -G users -s /bin/bash silver
-    passwd silver
+    useradd -m -G users -s /bin/bash $USERNAME
+    passwd $USERNAME
     visudo # uncomment the wheel group
-    usermod -a -G wheel silver
+    usermod -a -G wheel $USERNAME
 }
 
 function install_packages {
-    pacman -S xorg-server xorg-xinit xorg-server-utils mesa xf86-video-fbdev xf86-input-synaptics xf86-armsoc-chromium unzip dbus
     # Choose mesa-libgl when asked
-    pacman -S lightdm lightdm-gtk3-greeter gnome-icon-theme
-    pacman -S xfce4 sudo firefox midori gnome-keyring wget vim ttf-dejavu ttf-ubuntu-font-family htop strace lsof i3 xscreensaver git conky dmenu profont dina-font tamsyn-font alsa-utils ntp pm-utils p7zip xarchiver unrar zip python-pip tmux mpv mc make tmux iputils rtorrent youtube-dl macchanger tree acpid pulseaudio pulseaudio-alsa mupdf clang file gvim mosh nmap rxvt-unicode thunar 
-    pacman -S adduser rsyslog
+    pacman -S mesa-libgl xorg-server xorg-xinit xorg-server-utils mesa xf86-video-fbdev xf86-input-synaptics unzip dbus lightdm lightdm-gtk-greeter gnome-icon-theme xfce4 sudo firefox midori gnome-keyring wget vim ttf-dejavu ttf-ubuntu-font-family htop strace lsof i3 xscreensaver git conky dmenu profont dina-font tamsyn-font alsa-utils ntp pm-utils p7zip xarchiver unrar zip python-pip tmux mpv mc make tmux iputils rtorrent youtube-dl macchanger tree acpid pulseaudio pulseaudio-alsa mupdf clang file gvim mosh nmap rxvt-unicode thunar adduser rsyslog wicd chromium
+    pacman -S xf86-video-armsoc-chromium
 }
 
 function user_config {
@@ -90,9 +93,14 @@ function user_config {
 
     # Disable F1 and F10 in xfce4-terminal
     # edit .config/xfce4...
-    
-    # Install wicd saved networks
-    sudp cp /root/private/wireless-settings.conf /etc/wicd/
+    cd ~
+    mkdir -p github
+    cd github
+    git clone https://github.com/Dhole/dot_files.git
+    cd dot_files
+    cp -R .* ~
+    cp ALARM/.* ~
+    sh vim_setup.sh
 }
 
 #########
@@ -113,9 +121,10 @@ wifi-menu mlan0
 #########
 
 MYHOSTNAME="fox"
+USERNAME="silver"
 arch_config
 pacman -Syu
 install_packages
 add_user
 arch_customization
-user_config
+sudo -u $USERNAME user_config

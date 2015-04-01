@@ -1,7 +1,18 @@
 #! /bin/sh
 set -uew
 
-funcion install_deps {
+# Sources and inspiration:
+# https://elatov.github.io/2014/11/install-chromeos-kernel-38-on-samsung-chromebook/
+# https://elatov.github.io/2014/02/install-arch-linux-samsung-chromebook/
+# http://archlinuxarm.org/platforms/armv7/samsung/samsung-chromebook
+# http://linux-exynos.org/wiki/Samsung_Chromebook_XE303C12/Installing_Linux
+# http://archlinuxarm.org/forum/viewtopic.php?f=47&t=7071
+# https://dvikan.no/the-smallest-archlinux-install-guide
+
+# TODO: Install in eMMC
+# https://wiki.archlinux.org/index.php/Samsung_Chromebook_%28ARM%29
+
+function install_deps {
     # Install necessary packages for ubuntu
     sudo apt-get install u-boot-tools gcc-arm-linux-gnueabihf \
         binutils-arm-linux-gnueabihf cgpt device-tree-compiler
@@ -193,8 +204,8 @@ function install_files {
     umount root
 }
 
-# DISK=/dev/sde
-DISK=$1
+DISK=/dev/sde
+# DISK=$1
 #KERNEL_BRANCH="release-R40-6457.B-chromeos-3.8"
 KERNEL_BRANCH="chromeos-3.8"
 
@@ -231,4 +242,3 @@ install_custom_uboot_script
 
 sudo umount $DISK*
 sync
-
