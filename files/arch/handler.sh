@@ -61,8 +61,12 @@ case "$1" in
         case "$3" in
             close)
                 logger 'LID closed'
-                su silver -c "xscreensaver-command --lock"
-                pm-suspend
+                #su silver -c "xscreensaver-command --lock"
+                su silver -c "DISPLAY=:0.0 /usr/bin/i3lock -nc 000000 &"
+                #ifconfig mlan0 down
+                #pm-suspend
+                /usr/bin/systemctl suspend
+                ifconfig mlan0 up
                 ;;
             open)
                 logger 'LID opened'
